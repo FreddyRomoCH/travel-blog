@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../header/Header.astro";
+import { getPostInfo, getAllPostsSlugs } from "../../lib/wp";
+
+const slug = Astro.params.slug;
+if (!slug) return Astro.redirect("/404");
+
+// Just if the blog has small amount of posts use getStaticPaths if not use render: server
+export async function getStaticPaths() {
+  const slugs = await getAllPostsSlugs();
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { title, content, featuredImage, author } = await getPostInfo(slug);
+---
+
+<Layout title={title}>
+  <Header />
+  <div class="w-full h-[60dvh] overflow-hidden mb-4">
+    <img class="w-full h-full object-cover" src={featuredImage} alt={title} />
+  </div>
+  <div class="max-w-5xl mx-auto">
+    <h6 class="font-inter font-light text-secondary-text text-sm">
+      Writen by: <span>{author}</span>
+    </h6>
+  </div>
+  <article class="prose max-w-5xl mx-auto bg-base">
+    <div class="flex flex-col justify-center items-center gap-4">
+      <h2
+        class="font-playfair font-bold text-primary-text uppercase tracking-wider text-3xl"
+      >
+        {title}
+      </h2>
+      <div
+        class="font-inter font-normal text-primary-text text-md"
+        set:html={content}
+      />
+    </div>
+  </article>
+</Layout>

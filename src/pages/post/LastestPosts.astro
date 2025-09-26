@@ -1,0 +1,33 @@
+---
+const { title, excerpt, featuredImage, date, slug } = Astro.props;
+---
+
+<article
+  class="group flex flex-col h-full rounded-lg shadow bg-base overflow-hidden hover:scale-105 transition duration-300"
+>
+  <div class="w-full h-48 overflow-hidden">
+    <img
+      src={featuredImage}
+      alt={title}
+      class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+    />
+  </div>
+  <div class="p-4 flex flex-col flex-1 text-secondary-text">
+    <h2
+      class="font-playfair font-medium text-lg tracking-wide mb-2 text-primary-text"
+    >
+      <a href={`/post/${slug}`}>{title}</a>
+    </h2>
+    <p class="font-inter font-normal text-sm mb-4">{date}</p>
+    <div
+      class="font-inter font-normal text-primary-text mb-4 flex-1"
+      set:html={excerpt}
+    />
+    <a
+      href={`/post/${slug}`}
+      class="bg-primary text-primary-text font-playfair tracking-wide font-semibold hover:bg-primary-dark mx-auto px-3 py-1 rounded-lg shadow mt-auto"
+    >
+      Read more
+    </a>
+  </div>
+</article>
