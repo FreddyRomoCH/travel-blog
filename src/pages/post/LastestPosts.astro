@@ -3,7 +3,7 @@ const { title, excerpt, featuredImage, date, slug } = Astro.props;
 ---
 
 <article
-  class="group flex flex-col h-full rounded-lg shadow bg-base overflow-hidden hover:scale-105 transition duration-300"
+  class="group flex flex-col h-full rounded-lg shadow bg-card overflow-hidden hover:scale-105 transition duration-300"
 >
   <div class="w-full h-48 overflow-hidden">
     <img
@@ -25,7 +25,7 @@ const { title, excerpt, featuredImage, date, slug } = Astro.props;
     />
     <a
       href={`/post/${slug}`}
-      class="bg-primary text-primary-text font-playfair tracking-wide font-semibold hover:bg-primary-dark mx-auto px-3 py-1 rounded-lg shadow mt-auto"
+      class="bg-primary text-primary-text font-inter tracking-wide font-light hover:bg-primary-dark mx-auto px-3 py-1 rounded-sm shadow mt-auto"
     >
       Read more
     </a>

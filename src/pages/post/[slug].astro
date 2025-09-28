@@ -1,24 +1,34 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Header from "../header/Header.astro";
-import { getPostInfo, getAllPostsSlugs } from "../../lib/wp";
+import type { Slug, Categories, Tags } from "@lib/types";
+import Layout from "@layouts/Layout.astro";
+import { getPostInfo, getAllPostsSlugs, getPostsByCategory } from "@lib/wp";
+import RelatedPosts from "@components/posts/RelatedPosts.astro";
 
-const slug = Astro.params.slug;
+const { slug } = Astro.params as { slug: Slug };
 if (!slug) return Astro.redirect("/404");
 
 // Just if the blog has small amount of posts use getStaticPaths if not use render: server
 export async function getStaticPaths() {
-  const slugs = await getAllPostsSlugs();
+  const slugs: Slug[] = await getAllPostsSlugs();
   return slugs.map((slug) => ({ params: { slug } }));
 }
 
-const { title, content, featuredImage, author } = await getPostInfo(slug);
+const { title, content, featuredImage, author, categories, tags } =
+  await getPostInfo(slug);
+
+const categoryIds = categories.map((cate: Categories) => cate.id);
+
+const relatedPosts = await getPostsByCategory({ perPage: 3 }, { categoryIds });
 ---
 
 <Layout title={title}>
-  <Header />
   <div class="w-full h-[60dvh] overflow-hidden mb-4">
-    <img class="w-full h-full object-cover" src={featuredImage} alt={title} />
+    <img
+      class="w-full h-full object-cover"
+      src={featuredImage}
+      alt={title}
+      transition:name="picture"
+    />
   </div>
   <div class="max-w-5xl mx-auto">
     <h6 class="font-inter font-light text-secondary-text text-sm">
@@ -32,10 +42,45 @@ const { title, content, featuredImage, author } = await getPostInfo(slug);
       >
         {title}
       </h2>
+      <p class="font-inter font-light text-secondary-text text-sm">
+        Categories: {
+          categories.map((cat: Categories, index: number) => (
+            <>
+              <a href={`/category/${cat.slug}`} class="no-underline">
+                {cat.name}
+              </a>
+              {index < categories.length - 1 ? " - " : " "}
+            </>
+          ))
+        }
+      </p>
       <div
         class="font-inter font-normal text-primary-text text-md"
         set:html={content}
       />
     </div>
+    <div class="flex justify-center items-center gap-2">
+      <p class="font-inter font-light text-secondary-text text-sm">Tags:</p>
+      <ul class="flex justify-center items-center gap-4 list-none">
+        {
+          tags.map((tag: Tags) => (
+            <>
+              <li>
+                <nav>
+                  <a
+                    class="no-underline font-inter font-light text-sm"
+                    href={`/tags/${tag.slug}`}
+                  >
+                    {tag.name}
+                  </a>
+                </nav>
+              </li>
+            </>
+          ))
+        }
+      </ul>
+    </div>
   </article>
+
+  <RelatedPosts relatedPosts={relatedPosts} slug={slug} />
 </Layout>

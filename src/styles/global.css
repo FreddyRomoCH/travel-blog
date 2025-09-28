@@ -5,13 +5,14 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-    --color-primary: #AEEBFF;
+    --color-primary: #A5D1D3;
     --color-primary-dark: #6FCFF5;
-    --color-base: #F9FCFF;
+    --color-base: #F2EADB;
     --color-accent: #FACC15;
-    --color-primary-text: #1A1A1A;
-    --color-secondary-text: #6B7280;
+    --color-primary-text: #3F3A33;
+    --color-secondary-text: #2D2D2D;
     --color-separator: #D1D5DB;
+    --color-card: #FAF7F1
 
     /* FONT */
     --font-inter: 'Inter', sans-serif;

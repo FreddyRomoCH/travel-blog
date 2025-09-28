@@ -1,17 +1,15 @@
 ---
-import type { Post } from "../lib/types";
-import Layout from "../layouts/Layout.astro";
-import { getLatestPosts, getPageInfo } from "../lib/wp";
-import Header from "./header/Header.astro";
-import Banner from "./banner/Banner.astro";
-import LastestPosts from "./post/LastestPosts.astro";
+import type { Post } from "@lib/types";
+import Layout from "@layouts/Layout.astro";
+import { getLatestPosts, getPageInfo } from "@lib/wp";
+import Banner from "@components/banner/Banner.astro";
+import LastestPosts from "@pages/post/LastestPosts.astro";
 
 const { title, content, featuredImage } = await getPageInfo("home-page");
-const posts: Post[] = await getLatestPosts({ perPage: 3 });
+const posts = await getLatestPosts({ perPage: 3 });
 ---
 
 <Layout title={title}>
-  <Header />
   <Banner title={title} content={content} featuredImage={featuredImage} />
   <section class="max-w-5xl mx-auto text-center">
     <h2
@@ -19,9 +17,13 @@ const posts: Post[] = await getLatestPosts({ perPage: 3 });
     >
       Newests posts
     </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div
+      class="grid grid-cols-1 md:grid-cols-3 gap-6"
+      transition:name="picture"
+      transition:animate="fade"
+    >
       {
-        posts.map((post) => {
+        posts.map((post: Post) => {
           const { title, excerpt, featuredImage, date, slug } = post;
 
           return (
@@ -37,29 +39,4 @@ const posts: Post[] = await getLatestPosts({ perPage: 3 });
       }
     </div>
   </section>
-  erfvergre er g er g er g
-
-  <!-- <section>
-    <h2>Newests posts</h2>
-    <div>
-      {
-        posts.map((post) => {
-          const { title, excerpt, featuredImage, date, slug } = post;
-
-          return (
-            <article>
-              <img src={featuredImage} alt={title} />
-              <div>
-                <h2>
-                  <a href={`/post/${slug}`}>{title}</a>
-                </h2>
-                <p>{date}</p>
-                <div set:html={excerpt} />
-              </div>
-            </article>
-          );
-        })
-      }
-    </div>
-  </section> -->
 </Layout>
