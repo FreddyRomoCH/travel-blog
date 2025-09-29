@@ -19,6 +19,7 @@ const { title, content, featuredImage, author, categories, tags } =
 const categoryIds = categories.map((cate: Categories) => cate.id);
 
 const relatedPosts = await getPostsByCategory({ perPage: 3 }, { categoryIds });
+const hasRelatedPosts = relatedPosts.length > 1;
 ---
 
 <Layout title={title}>
@@ -82,5 +83,5 @@ const relatedPosts = await getPostsByCategory({ perPage: 3 }, { categoryIds });
     </div>
   </article>
 
-  <RelatedPosts relatedPosts={relatedPosts} slug={slug} />
+  {hasRelatedPosts && <RelatedPosts relatedPosts={relatedPosts} slug={slug} />}
 </Layout>

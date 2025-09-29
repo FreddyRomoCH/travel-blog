@@ -1,4 +1,4 @@
-import type { Post } from "./types"
+import type { Post, WPPost, Categories, Tags, Category } from "./types"
 const domain = import.meta.env.WP_DOMAIN
 const apiUrl = `${domain}/wp-json/wp/v2`
 
@@ -15,15 +15,31 @@ export const getPageInfo = async (slug: string) => {
 }
 
 export const getAllPostsSlugs = async () => {
-    const response = await fetch(`${apiUrl}/posts?per+page=100`)
+    const response = await fetch(`${apiUrl}/posts?per_page=100`)
     if (!response.ok) throw new Error("Failed to fetch latest posts")
 
     const results = await response.json()
     if (!results.length) throw new Error("No posts found")
 
-    const slugs = results.map((post) => post.slug)
+    const slugs = results.map((post: Post) => post.slug)
 
     return slugs
+}
+
+export const getAllPostsCategory = async () => {
+    const response = await fetch(`${apiUrl}/categories?per_page=100`)
+    if (!response.ok) throw new Error("Failed to fetch latest posts")
+
+    const results = await response.json()
+    if (!results.length) throw new Error("No posts found")
+
+    const categories = results.map((category: Category) => {
+        const { id, slug, name } = category
+
+        return { id, slug, name }
+    })
+
+    return categories
 }
 
 export const getPostInfo = async (slug: string) => {
@@ -35,12 +51,12 @@ export const getPostInfo = async (slug: string) => {
 
     const featuredImage = data._embedded['wp:featuredmedia'][0].source_url
     const author = data._embedded['author'][0].name
-    const categories = data._embedded['wp:term'][0].map((category) => {
+    const categories = data._embedded['wp:term'][0].map((category: Categories) => {
         const {id, name, slug} = category
 
         return {id, name, slug}
     })
-    const tags = data._embedded['wp:term'][1].map((tag) => {
+    const tags = data._embedded['wp:term'][1].map((tag: Tags) => {
         const { id, name, slug  } = tag
 
         return {id, name, slug}
@@ -56,7 +72,7 @@ export const getLatestPosts = async ({ perPage = 10 }: { perPage?: number } = {}
     const results = await response.json()
     if (!results.length) throw new Error("No posts found")
 
-    const posts = results.map(post => {
+    const posts = results.map((post: WPPost) => {
         const {
             title: { rendered: title },
             excerpt: { rendered: excerpt },
@@ -65,7 +81,7 @@ export const getLatestPosts = async ({ perPage = 10 }: { perPage?: number } = {}
             slug
         } = post
 
-        const featuredImage = post._embedded['wp:featuredmedia'][0].source_url
+        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
@@ -82,7 +98,7 @@ export const getPostsByCategory = async ({ perPage = 10 }: { perPage?: number } 
 
     if (!results.length) throw new Error("No Posts found")
 
-    const posts = results.map((post) => {
+    const posts = results.map((post: WPPost) => {
         const {
             title: { rendered: title },
             excerpt: { rendered: excerpt },
@@ -91,10 +107,36 @@ export const getPostsByCategory = async ({ perPage = 10 }: { perPage?: number } 
             slug
         } = post
 
-        const featuredImage = post._embedded['wp:featuredmedia'][0].source_url
+        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
 
     return posts
+}
+
+export const getAllPosts = async ({ page = 1, perPage = 6 }: {page?:number, perPage?:number}) => {
+    const response = await fetch(`${apiUrl}/posts?page=${page}&per_page=${perPage}&_embed`)
+    if (!response.ok) throw new Error('Error fetching data')
+
+    const results = await response.json()
+    if (!results.length) throw new Error("No posts found")
+
+    const totalPages = Number(response.headers.get("X-WP-TotalPages") || 1)
+
+    const posts = results.map((post: WPPost) => {
+        const {
+            title: {rendered: title},
+            excerpt: { rendered: excerpt },
+            content: { rendered: content },
+            date,
+            slug
+        } = post
+
+        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+
+        return { title, excerpt, content, date, slug, featuredImage }
+    })
+
+    return { posts, totalPages }
 }

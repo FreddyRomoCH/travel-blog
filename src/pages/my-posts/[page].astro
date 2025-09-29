@@ -1,0 +1,64 @@
+---
+import { getAllPosts, getPageInfo } from "@lib/wp";
+import Layout from "@layouts/Layout.astro";
+import Banner from "@components/banner/Banner.astro";
+import AllPosts from "@components/posts/AllPosts.astro";
+
+export async function getStaticPaths() {
+  const { totalPages } = await getAllPosts({ page: 1, perPage: 6 });
+
+  return Array.from({ length: totalPages }, (_, i) => ({
+    params: { page: String(i + 1) },
+  }));
+}
+
+const currentPage = Number(Astro.params.page) || 1;
+const perPage = 6;
+
+const { posts, totalPages } = await getAllPosts({
+  page: currentPage,
+  perPage,
+});
+
+const { title, content, featuredImage } = await getPageInfo("my-posts");
+
+const prevPage = currentPage > 1 ? currentPage - 1 : null;
+const nextPage = currentPage < totalPages ? currentPage + 1 : null;
+---
+
+<Layout title={title}>
+  <Banner
+    title={title}
+    content={content}
+    featuredImage={featuredImage}
+    pageName="my-posts"
+  />
+
+  <AllPosts posts={posts} />
+
+  <nav class="flex justify-center gap-4 mt-6">
+    {
+      prevPage && (
+        <a
+          href={`/my-posts/${prevPage}`}
+          class="px-4 py-2 bg-primary hover:bg-primary-dark rounded shadow text-sm text-primary-text font-inter font-light"
+        >
+          ← Previous
+        </a>
+      )
+    }
+    <span class="px-4 py-2 text-sm text-primary-text font-inter font-light">
+      Page {currentPage} of {totalPages}
+    </span>
+    {
+      nextPage && (
+        <a
+          href={`/my-posts/${nextPage}`}
+          class="px-4 py-2 bg-primary hover:bg-primary-dark rounded shadow text-sm text-primary-text font-inter font-light"
+        >
+          Next →
+        </a>
+      )
+    }
+  </nav>
+</Layout>

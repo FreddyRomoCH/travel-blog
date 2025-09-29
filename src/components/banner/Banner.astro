@@ -1,5 +1,7 @@
 ---
-const { title, content, featuredImage } = Astro.props;
+const { title, content, featuredImage, pageName } = Astro.props;
+
+const showButton = pageName === "home-page";
 ---
 
 <section>
@@ -7,13 +9,11 @@ const { title, content, featuredImage } = Astro.props;
     class="group relative bg-cover bg-center bg-no-repeat h-[80dvh] flex flex-col justify-center overflow-hidden animate-fade-in"
     style={`background-image: url(${featuredImage});`}
   >
-    <!-- Overlay con animación -->
     <div
       class="absolute inset-0 bg-black/40 transition duration-700 group-hover:scale-105 group-hover:bg-black/60"
     >
     </div>
 
-    <!-- Contenido -->
     <div
       class="relative flex flex-col items-center justify-center text-center gap-3 z-10 transition-transform duration-700 group-hover:scale-105"
     >
@@ -26,12 +26,17 @@ const { title, content, featuredImage } = Astro.props;
         class="text-base font-inter font-normal text-lg animate-slide-up [animation-delay:200ms]"
         set:html={content}
       />
-      <a
-        href="#posts"
-        class="bg-primary font-inter font-light text-primary-text tracking-wide px-6 py-3 rounded-sm shadow hover:bg-primary-dark transition animate-slide-up [animation-delay:400ms]"
-      >
-        See Posts
-      </a>
+
+      {
+        showButton && (
+          <a
+            href="/my-posts/1"
+            class="bg-primary font-inter font-light text-primary-text tracking-wide px-6 py-3 rounded-sm shadow hover:bg-primary-dark transition animate-slide-up [animation-delay:400ms]"
+          >
+            See Posts
+          </a>
+        )
+      }
     </div>
   </div>
 </section>

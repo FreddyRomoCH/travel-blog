@@ -1,22 +1,22 @@
 ---
-import type { Post, Categories } from "@lib/types";
-import CardPost from "@components/posts/CardPost.astro";
-const { relatedPosts, slug } = Astro.props;
-
-const filteresPosts = relatedPosts.filter(
-  (post: Categories) => post.slug !== slug
-);
+import type { Post } from "@lib/types";
+const { posts } = Astro.props;
+import CardPost from "./CardPost.astro";
 ---
 
 <section class="max-w-5xl mx-auto text-center">
   <h2
     class="text-primary-text text-3xl font-medium tracking-wider py-3 font-playfair"
   >
-    Related posts
+    Latest posts
   </h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div
+    class="grid grid-cols-1 md:grid-cols-3 gap-6"
+    transition:name="picture"
+    transition:animate="fade"
+  >
     {
-      filteresPosts.map((post: Post) => {
+      posts.map((post: Post) => {
         const { title, excerpt, featuredImage, date, slug } = post;
 
         return (

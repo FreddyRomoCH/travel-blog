@@ -1,0 +1,28 @@
+---
+import Banner from "@components/banner/Banner.astro";
+import AllPosts from "@components/posts/AllPosts.astro";
+import Layout from "@layouts/Layout.astro";
+import type { Category, Slug } from "@lib/types";
+import { getPageInfo, getAllPostsCategory, getPostsByCategory } from "@lib/wp";
+
+// Just if the blog has small amount of posts use getStaticPaths if not use render: server
+export async function getStaticPaths() {
+  const categories: Category[] = await getAllPostsCategory();
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: { id: category.id },
+  }));
+}
+
+const { category } = Astro.params as { category: Slug };
+const { id } = Astro.props as { id: number };
+
+const { title, content, featuredImage } = await getPageInfo("categories");
+
+const posts = await getPostsByCategory({ perPage: 3 }, { categoryIds: [id] });
+---
+
+<Layout title={`${title} - ${category}`}>
+  <Banner title={title} content={content} featuredImage={featuredImage} />
+  <AllPosts posts={posts} />
+</Layout>

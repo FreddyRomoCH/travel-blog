@@ -32,3 +32,13 @@ const { title, description = "Blog of all my trips around the world" } =
     <ClientRouter />
   </body>
 </html>
+
+<script>
+  // To smoothly scroll tp all posts section when pagination is active
+  document.addEventListener("astro:after-swap", () => {
+    const postsSection = document.getElementById("posts");
+    if (postsSection) {
+      postsSection.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+</script>

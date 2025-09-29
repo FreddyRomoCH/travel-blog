@@ -1,42 +1,19 @@
 ---
-import type { Post } from "@lib/types";
 import Layout from "@layouts/Layout.astro";
 import { getLatestPosts, getPageInfo } from "@lib/wp";
 import Banner from "@components/banner/Banner.astro";
-import LastestPosts from "@pages/post/LastestPosts.astro";
+import LatestPosts from "@components/posts/LatestPosts.astro";
 
 const { title, content, featuredImage } = await getPageInfo("home-page");
 const posts = await getLatestPosts({ perPage: 3 });
 ---
 
 <Layout title={title}>
-  <Banner title={title} content={content} featuredImage={featuredImage} />
-  <section class="max-w-5xl mx-auto text-center">
-    <h2
-      class="text-primary-text text-3xl font-medium tracking-wider py-3 font-playfair"
-    >
-      Newests posts
-    </h2>
-    <div
-      class="grid grid-cols-1 md:grid-cols-3 gap-6"
-      transition:name="picture"
-      transition:animate="fade"
-    >
-      {
-        posts.map((post: Post) => {
-          const { title, excerpt, featuredImage, date, slug } = post;
-
-          return (
-            <LastestPosts
-              title={title}
-              excerpt={excerpt}
-              featuredImage={featuredImage}
-              date={date}
-              slug={slug}
-            />
-          );
-        })
-      }
-    </div>
-  </section>
+  <Banner
+    title={title}
+    content={content}
+    featuredImage={featuredImage}
+    pageName="home-page"
+  />
+  <LatestPosts posts={posts} />
 </Layout>

@@ -1,0 +1,38 @@
+---
+import Banner from "@components/banner/Banner.astro";
+import Layout from "@layouts/Layout.astro";
+import type { Category } from "@lib/types";
+import { getPageInfo, getAllPostsCategory } from "@lib/wp";
+
+const { title, content, featuredImage } = await getPageInfo("categories");
+
+const categories: Category[] = await getAllPostsCategory();
+
+const categoriesFilteres = categories.filter((cate) => cate.id !== 1);
+---
+
+<Layout title={title}>
+  <Banner title={title} content={content} featuredImage={featuredImage} />
+  <section class="max-w-5xl mx-auto text-center">
+    <h2
+      class="text-primary-text text-3xl font-medium tracking-wider py-3 font-playfair"
+    >
+      Latest posts
+    </h2>
+
+    <ul class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {
+        categoriesFilteres.map((cat) => (
+          <li class="bg-primary hover:bg-primary-dark shadow rounded hover:scale-105 transition flex justify-center items-center">
+            <a
+              href={`/category/${cat.slug}`}
+              class="text-primary-text font-inter font-semibold hover:no-underline w-full h-full p-4"
+            >
+              {cat.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>
