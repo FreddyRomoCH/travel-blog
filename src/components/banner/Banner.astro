@@ -4,7 +4,7 @@ const { title, content, featuredImage, pageName } = Astro.props;
 const showButton = pageName === "home-page";
 ---
 
-<section>
+<section class="mb-8">
   <div
     class="group relative bg-cover bg-center bg-no-repeat h-[80dvh] flex flex-col justify-center overflow-hidden animate-fade-in"
     style={`background-image: url(${featuredImage});`}

@@ -83,5 +83,5 @@ const hasRelatedPosts = relatedPosts.length > 1;
     </div>
   </article>
 
-  {hasRelatedPosts && <RelatedPosts relatedPosts={relatedPosts} slug={slug} />}
+  {hasRelatedPosts && <RelatedPosts posts={relatedPosts} currentSlug={slug} />}
 </Layout>

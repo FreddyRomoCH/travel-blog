@@ -1,10 +1,10 @@
 ---
 import type { Post, Categories } from "@lib/types";
 import CardPost from "@components/posts/CardPost.astro";
-const { relatedPosts, slug } = Astro.props;
+const { posts, currentlug } = Astro.props;
 
-const filteresPosts = relatedPosts.filter(
-  (post: Categories) => post.slug !== slug
+const filteresPosts = posts.filter(
+  (post: Categories) => post.slug !== currentlug
 );
 ---
 

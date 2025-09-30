@@ -1,0 +1,27 @@
+---
+import Banner from "@components/banner/Banner.astro";
+import AllPosts from "@components/posts/AllPosts.astro";
+import Layout from "@layouts/Layout.astro";
+import type { Category, Slug } from "@lib/types";
+import { getAllPostsTags, getPageInfo, getPostsByTags } from "@lib/wp";
+
+export async function getStaticPaths() {
+  const tags = await getAllPostsTags();
+  return tags.map((tag: Category) => ({
+    params: { tag: tag.slug },
+    props: { id: tag.id },
+  }));
+}
+
+const { tag } = Astro.params as { tag: Slug };
+const { id } = Astro.props as { id: number };
+
+const { title, content, featuredImage } = await getPageInfo("tags");
+
+const posts = await getPostsByTags({ perPage: 3 }, { tagIds: [id] });
+---
+
+<Layout title=`Tag - ${tag}`>
+  <Banner title={title} content={content} featuredImage={featuredImage} />
+  <AllPosts posts={posts} />
+</Layout>
