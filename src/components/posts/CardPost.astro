@@ -14,18 +14,18 @@ const { title, excerpt, featuredImage, date, slug } = Astro.props;
   </div>
   <div class="p-4 flex flex-col flex-1 text-secondary-text">
     <h2
-      class="font-playfair font-medium text-lg tracking-wide mb-2 text-primary-text"
+      class="font-plusjakarta font-medium text-lg tracking-wide mb-2 text-primary-text"
     >
       <a href={`/post/${slug}`}>{title}</a>
     </h2>
     <!-- <p class="font-inter font-normal text-sm mb-4">{date}</p> -->
     <div
-      class="font-inter font-normal text-primary-text mb-4 flex-1"
+      class="font-plusjakarta font-normal text-secondary-text mb-4 flex-1"
       set:html={excerpt}
     />
     <a
       href={`/post/${slug}`}
-      class="bg-primary text-base font-inter tracking-wide font-light hover:bg-primary-dark mx-auto px-6 py-1 rounded-lg shadow mt-auto"
+      class="bg-primary text-base font-plusjakarta tracking-wide font-light hover:bg-primary-dark mx-auto px-6 py-1 rounded-lg shadow mt-auto"
     >
       More
     </a>
