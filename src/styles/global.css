@@ -5,13 +5,17 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-    --color-primary: #A5D1D3;
-    --color-primary-dark: #6FCFF5;
+    --color-primary: #2badee;
+    --color-primary-dark: #156C95;
+    --color-primary-light: #7ED2F5;
+    --color-primary-hover: #1F96D3;
+    --color-background-light: #f6f7f8;
+    --color-primary-text: #1d293d;
+    --color-secondary-text: #2D2D2D;
+    --color-text-nav: #314158;
     --color-base: #F2EADB;
     --color-accent: #FACC15;
-    --color-primary-text: #3F3A33;
-    --color-secondary-text: #2D2D2D;
-    --color-separator: #D1D5DB;
+    --color-separator: #e2e8f0;
     --color-card: #FFF;
 
     /* FONT */

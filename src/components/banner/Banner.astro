@@ -4,9 +4,9 @@ const { title, content, featuredImage, pageName } = Astro.props;
 const showButton = pageName === "home-page";
 ---
 
-<section class="mb-8">
+<section class="mx-auto max-w-7xl px-4 mt-4 sm:px-6 lg:px-8">
   <div
-    class="group relative bg-cover bg-center bg-no-repeat h-[80dvh] flex flex-col justify-center overflow-hidden animate-fade-in"
+    class="group relative bg-cover bg-center bg-no-repeat h-[500px] rounded-xl flex flex-col justify-center overflow-hidden animate-fade-in"
     style={`background-image: url(${featuredImage});`}
   >
     <div
@@ -31,9 +31,9 @@ const showButton = pageName === "home-page";
         showButton && (
           <a
             href="/my-posts/1"
-            class="bg-primary font-inter font-light text-primary-text tracking-wide px-6 py-3 rounded-sm shadow hover:bg-primary-dark transition animate-slide-up [animation-delay:400ms]"
+            class="bg-primary font-inter font-light text-base tracking-wide px-6 py-3 rounded-lg shadow hover:bg-primary-hover transition animate-slide-up [animation-delay:400ms]"
           >
-            See Posts
+            Start Exploring
           </a>
         )
       }

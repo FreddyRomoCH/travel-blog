@@ -5,7 +5,7 @@ import Banner from "@components/banner/Banner.astro";
 import LatestPosts from "@components/posts/LatestPosts.astro";
 
 const { title, content, featuredImage } = await getPageInfo("home-page");
-const posts = await getLatestPosts({ perPage: 3 });
+const posts = await getLatestPosts({ perPage: 6 });
 ---
 
 <Layout title={title}>
