@@ -38,7 +38,7 @@ const { title, description = "Blog of all my trips around the world" } =
   document.addEventListener("astro:after-swap", () => {
     const postsSection = document.getElementById("posts");
     if (postsSection) {
-      postsSection.scrollIntoView({ behavior: "smooth" });
+      postsSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
 </script>

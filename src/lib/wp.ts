@@ -9,7 +9,7 @@ export const getPageInfo = async (slug: string) => {
     const [data] = await response.json()
     const { title: { rendered: title }, content: { rendered: content } } = data
 
-    const featuredImage = data._embedded['wp:featuredmedia'][0].source_url
+    const featuredImage = data._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
 
     return { title, content, featuredImage }
 }
@@ -63,7 +63,7 @@ export const getPostInfo = async (slug: string) => {
     if (!response.ok) throw new Error("Failed to fetch page info")
 
     const [data] = await response.json()
-    const { title: { rendered: title }, content: { rendered: content } } = data
+    const { date, title: { rendered: title }, content: { rendered: content } } = data
 
     const featuredImage = data._embedded['wp:featuredmedia'][0].source_url
     const author = data._embedded['author'][0].name
@@ -78,7 +78,7 @@ export const getPostInfo = async (slug: string) => {
         return {id, name, slug}
     })
 
-    return { title, content, featuredImage, author, categories, tags }
+    return { date, title, content, featuredImage, author, categories, tags }
 }
 
 export const getLatestPosts = async ({ perPage = 10 }: { perPage?: number } = {}) => {
