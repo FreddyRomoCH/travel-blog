@@ -1,6 +1,7 @@
 import type { Post, WPPost, Categories, Tags, Category } from "./types"
 const domain = import.meta.env.WP_DOMAIN
-const apiUrl = `${domain}/wp-json/wp/v2`
+const isProd = import.meta.env.MODE === "production"
+const apiUrl = isProd ? domain : `${domain}/wp-json/wp/v2`
 
 export const getPageInfo = async (slug: string) => {
     const response = await fetch(`${apiUrl}/pages?slug=${slug}&_embed`)
