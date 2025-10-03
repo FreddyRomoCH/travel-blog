@@ -6,7 +6,7 @@ const showButton = pageName === "home-page";
 
 <section class="mx-auto max-w-7xl px-4 mt-4 sm:px-6 lg:px-8">
   <div
-    class="group relative bg-cover bg-center bg-no-repeat h-[500px] rounded-xl flex flex-col justify-center overflow-hidden animate-fade-in"
+    class="group relative bg-cover bg-center bg-no-repeat h-96 md:h-[500px] rounded-xl flex flex-col justify-center overflow-hidden animate-fade-in"
     style={`background-image: url(${featuredImage});`}
   >
     <div
@@ -18,12 +18,12 @@ const showButton = pageName === "home-page";
       class="relative flex flex-col items-center justify-center text-center gap-3 z-10 transition-transform duration-700 group-hover:scale-105"
     >
       <h1
-        class="text-base font-plusjakarta font-extrabold text-4xl uppercase tracking-wider animate-slide-up"
+        class="text-base font-plusjakarta font-extrabold text-3xl md:text-4xl uppercase tracking-wider animate-slide-up"
       >
         {title}
       </h1>
       <div
-        class="text-base font-plusjakarta font-normal text-lg animate-slide-up [animation-delay:200ms]"
+        class="text-base font-plusjakarta font-normal px-2 text-sm md:text-lg animate-slide-up [animation-delay:200ms]"
         set:html={content}
       />
 
@@ -31,7 +31,7 @@ const showButton = pageName === "home-page";
         showButton && (
           <a
             href="/my-posts/1"
-            class="bg-primary font-plusjakarta font-light text-base tracking-wide px-6 py-3 rounded-lg shadow hover:bg-primary-hover transition animate-slide-up [animation-delay:400ms]"
+            class="bg-primary font-plusjakarta font-normal text-sm md:text-md text-base tracking-wide px-4 py-2 md:px-6 md:py-3 rounded-lg shadow hover:bg-primary-hover transition animate-slide-up [animation-delay:400ms]"
           >
             Start Exploring
           </a>

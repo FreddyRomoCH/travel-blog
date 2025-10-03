@@ -36,12 +36,12 @@ const nextPage = currentPage < totalPages ? currentPage + 1 : null;
 
   <AllPosts posts={posts} />
 
-  <nav class="flex justify-center gap-4 mt-6">
+  <nav class="flex justify-center gap-4 my-6">
     {
       prevPage && (
         <a
           href={`/my-posts/${prevPage}`}
-          class="px-4 py-2 bg-primary hover:bg-primary-dark rounded shadow text-sm text-primary-text font-inter font-light"
+          class="px-4 py-2 bg-primary hover:bg-primary-dark rounded-lg shadow text-sm font-inter font-light text-base"
         >
           ← Previous
         </a>
@@ -54,7 +54,7 @@ const nextPage = currentPage < totalPages ? currentPage + 1 : null;
       nextPage && (
         <a
           href={`/my-posts/${nextPage}`}
-          class="px-4 py-2 bg-primary hover:bg-primary-dark rounded shadow text-sm text-primary-text font-inter font-light"
+          class="px-4 py-2 bg-primary hover:bg-primary-dark rounded-lg shadow text-sm font-inter font-light text-base"
         >
           Next →
         </a>

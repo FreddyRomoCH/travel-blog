@@ -3,6 +3,7 @@ import "@fontsource-variable/inter";
 import "@styles/global.css";
 import Footer from "@components/footer/Footer.astro";
 import Header from "@components/header/Header.astro";
+import MenuMobile from "@components/mobile/MenuMobile.astro";
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
@@ -29,16 +30,42 @@ const { title, description = "Blog of all my trips around the world" } =
     <slot />
     <Footer />
 
+    <!-- Mobile Menu -->
+    <MenuMobile />
+
     <ClientRouter />
   </body>
 </html>
 
 <script>
-  // To smoothly scroll tp all posts section when pagination is active
+  // To smoothly scroll to all posts section when pagination is active
   document.addEventListener("astro:after-swap", () => {
     const postsSection = document.getElementById("posts");
+
     if (postsSection) {
       postsSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
+</script>
+
+<script type="module" is:inline>
+  function setupMenuToggle() {
+    const menuBtn = document.getElementById("menu-button");
+    const menuMobile = document.getElementById("menu-mobile");
+    const iconOpen = document.getElementById("icon-open");
+    const iconClose = document.getElementById("icon-close");
+
+    if (!menuBtn) return;
+
+    menuBtn.addEventListener("click", () => {
+      const expanded =
+        menuBtn.getAttribute("aria-expanded") === "true" || false;
+      menuBtn.setAttribute("aria-expanded", (!expanded).toString());
+      menuMobile?.classList.toggle("translate-x-0");
+      iconOpen?.classList.toggle("hidden");
+      iconClose?.classList.toggle("hidden");
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupMenuToggle);
 </script>

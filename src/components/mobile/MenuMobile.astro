@@ -1,0 +1,42 @@
+---
+import { menuLinks } from "@lib/utils";
+const { pathname } = Astro.url;
+---
+
+<div
+  id="menu-mobile"
+  class="fixed z-50 inset-0 w-[85%] h-full bg-primary-dark md:hidden p-4 transform -translate-x-full transition-transform duration-300 ease-in-out"
+>
+  <h1
+    class="font-plusjakarta font-bold text-base text-lg tracking-wider mb-8 border-b border-separator/80 backdrop-blur-sm py-2"
+  >
+    Milja Travels
+  </h1>
+  <nav class="flex flex-col gap-4 justify-center items-start">
+    {
+      menuLinks.map((link) => {
+        const { name, href } = link;
+
+        let isActive = false;
+
+        if (href === "/") {
+          isActive = pathname === "/";
+        } else if (href.startsWith("/my-posts/1")) {
+          isActive =
+            pathname.startsWith("/my-posts") || pathname.startsWith("/post/");
+        } else {
+          isActive = pathname.includes(href);
+        }
+
+        return (
+          <a
+            href={href}
+            class={`font-inter text-md text-base font-medium text-sm rounded-2xl p-2 w-full ${isActive ? "bg-primary-light/30 text-base" : ""}`}
+          >
+            {name}
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>

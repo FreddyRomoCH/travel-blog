@@ -1,4 +1,5 @@
 ---
+import { menuLinks } from "@lib/utils";
 const { pathname } = Astro.url;
 ---
 
@@ -11,29 +12,73 @@ const { pathname } = Astro.url;
     </h1>
 
     <div
-      class="hidden md:flex justify-center items-center gap-8 text-sm text-nav font-medium"
+      class="block md:hidden"
+      id="menu-button"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
     >
-      <nav>
-        <a
-          href="/my-posts/1"
-          class={`rounded-sm p-2 hover:bg-primary hover:text-base $ ${pathname.startsWith("/my-posts") ? "bg-primary text-base" : ""}`}
-          >Posts</a
-        >
-      </nav>
-      <nav>
-        <a
-          href="/category"
-          class={`rounded-sm p-2 hover:bg-primary hover:text-base ${pathname.startsWith("/category") ? "bg-primary text-base" : ""}`}
-          >Categories</a
-        >
-      </nav>
-      <nav>
-        <a
-          href="/about"
-          class={`rounded-sm p-2 hover:bg-primary hover:text-base $ ${pathname.startsWith("/about") ? "bg-primary text-base" : ""}`}
-          >About Me</a
-        >
-      </nav>
+      <svg
+        id="icon-open"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-primary"
+        ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+          d="M4 6h16"></path><path d="M7 12h13"></path><path d="M10 18h10"
+        ></path></svg
+      >
+
+      <svg
+        id="icon-close"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-primary hidden"
+        ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+          d="M18 6l-12 12"></path><path d="M6 6l12 12"></path></svg
+      >
+    </div>
+
+    <nav
+      class="hidden md:flex justify-center items-center gap-4 text-sm text-nav font-medium"
+    >
+      {
+        menuLinks.map((link) => {
+          const { name, href } = link;
+
+          let isActive = false;
+
+          if (href === "/") {
+            isActive = pathname === "/";
+          } else if (href.startsWith("/my-posts/1")) {
+            isActive =
+              pathname.startsWith("/my-posts") || pathname.startsWith("/post/");
+          } else {
+            isActive = pathname.includes(href);
+          }
+
+          return (
+            <a
+              href={href}
+              class={`rounded-sm p-2 hover:bg-primary hover:text-base ${isActive ? "bg-primary text-base" : ""}`}
+            >
+              {name}
+            </a>
+          );
+        })
+      }
 
       <div class="flex justify-center items-center">
         <a href="#">
@@ -70,6 +115,6 @@ const { pathname } = Astro.url;
           >
         </a>
       </div>
-    </div>
+    </nav>
   </div>
 </header>
