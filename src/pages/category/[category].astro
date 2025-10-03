@@ -17,7 +17,13 @@ export async function getStaticPaths() {
 const { category } = Astro.params as { category: Slug };
 const { id } = Astro.props as { id: number };
 
-const { title, content, featuredImage } = await getPageInfo("categories");
+const categoriesPageInfo = await getPageInfo("categories");
+
+if (!categoriesPageInfo) {
+  return [];
+}
+
+const { title, content, featuredImage } = categoriesPageInfo;
 
 const posts = await getPostsByCategory({ perPage: 3 }, { categoryIds: [id] });
 ---

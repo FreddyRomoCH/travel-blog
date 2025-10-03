@@ -4,35 +4,43 @@ import Layout from "@layouts/Layout.astro";
 import type { Category } from "@lib/types";
 import { getPageInfo, getAllPostsCategory } from "@lib/wp";
 
-const { title, content, featuredImage } = await getPageInfo("categories");
+const categoryPage = await getPageInfo("categories");
 
 const categories: Category[] = await getAllPostsCategory();
 
 const categoriesFilteres = categories.filter((cate) => cate.id !== 1);
+
+const pageExists = categoryPage && categoriesFilteres.length > 0;
 ---
 
-<Layout title={title}>
-  <Banner title={title} content={content} featuredImage={featuredImage} />
-  <section class="max-w-7xl mx-auto text-left md:text-center px-4 py-4 sm:px-6">
-    <h2
-      class="text-primary-text text-3xl font-bold tracking-wider py-3 font-plusjakarta"
-    >
-      Explore the categories
-    </h2>
+{
+  pageExists && (
+    <Layout title={categoryPage.title}>
+      <Banner
+        title={categoryPage.title}
+        content={categoryPage.content}
+        featuredImage={categoryPage.featuredImage}
+      />
+      <section class="max-w-7xl mx-auto text-left md:text-center px-4 py-4 sm:px-6">
+        <h2 class="text-primary-text text-3xl font-bold tracking-wider py-3 font-plusjakarta">
+          Explore the categories
+        </h2>
 
-    <ul class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-4">
-      {
-        categoriesFilteres.map((cat) => (
-          <li class="bg-primary hover:bg-primary-hover shadow rounded hover:scale-105 transition flex justify-center items-center">
-            <a
-              href={`/category/${cat.slug}`}
-              class="text-secondary-text font-plusjakarta font-semibold hover:no-underline w-full h-full p-4"
-            >
-              {cat.name}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-</Layout>
+        <ul class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-4">
+          {categoriesFilteres.map((cat) => (
+            <li class="bg-primary hover:bg-primary-hover shadow rounded hover:scale-105 transition flex justify-center items-center">
+              <a
+                href={`/category/${cat.slug}`}
+                class="text-secondary-text font-plusjakarta font-semibold hover:no-underline w-full h-full p-4"
+              >
+                {cat.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </Layout>
+  )
+}
+
+{!pageExists && Astro.redirect("/404")}

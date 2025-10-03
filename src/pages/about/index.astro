@@ -2,42 +2,45 @@
 import Layout from "@layouts/Layout.astro";
 import { getPageInfo } from "@lib/wp";
 
-const { title, content, featuredImage } = await getPageInfo("about");
-const { title: journeyTitle, content: journeyContent } =
-  await getPageInfo("my-journey");
+const aboutPage = await getPageInfo("about");
+const journeyPage = await getPageInfo("my-journey");
+
+const pageExists = aboutPage && journeyPage;
 ---
 
-<Layout title={title}>
-  <main
-    class="max-w-7xl mx-auto py-6 min-h-dvh flex flex-col justify-center item-center gap-8 px-4"
-  >
-    <header class="flex flex-col justify-center items-center gap-4 text-center">
-      <h1 class="font-plusjakarta font-bold text-4xl text-primary-text">
-        {title}
-      </h1>
-      <div
-        class="md:max-w-2xl text-md font-inter text-text-light mb-2 md:mb-12"
-        set:html={content}
-      />
-    </header>
+{
+  pageExists && (
+    <Layout title={aboutPage.title}>
+      <main class="max-w-7xl mx-auto py-6 min-h-dvh flex flex-col justify-center item-center gap-8 px-4">
+        <header class="flex flex-col justify-center items-center gap-4 text-center">
+          <h1 class="font-plusjakarta font-bold text-4xl text-primary-text">
+            {aboutPage.title}
+          </h1>
+          <div
+            class="md:max-w-2xl text-md font-inter text-text-light mb-2 md:mb-12"
+            set:html={aboutPage.content}
+          />
+        </header>
 
-    <section
-      class="flex flex-col md:flex-row justify-center items-center gap-12"
-    >
-      <img
-        class="rounded-lg shadow shadow-black aspect-auto object-cover h-80 md:h-96"
-        src={featuredImage}
-        alt={title}
-      />
-      <article class="md:max-w-xl">
-        <h3 class="font-plusjakarta font-bold text-2xl mb-4 text-primary-text">
-          {journeyTitle}
-        </h3>
-        <div
-          class="font-inter font-normal text-md text-secondary-text"
-          set:html={journeyContent}
-        />
-      </article>
-    </section>
-  </main>
-</Layout>
+        <section class="flex flex-col md:flex-row justify-center items-center gap-12">
+          <img
+            class="rounded-lg shadow shadow-black aspect-auto object-cover h-80 md:h-96"
+            src={aboutPage.featuredImage}
+            alt={journeyPage.title}
+          />
+          <article class="md:max-w-xl">
+            <h3 class="font-plusjakarta font-bold text-2xl mb-4 text-primary-text">
+              {journeyPage.title}
+            </h3>
+            <div
+              class="font-inter font-normal text-md text-secondary-text"
+              set:html={journeyPage.content}
+            />
+          </article>
+        </section>
+      </main>
+    </Layout>
+  )
+}
+
+{!pageExists && Astro.redirect("/404")}

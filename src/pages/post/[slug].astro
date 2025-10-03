@@ -13,8 +13,14 @@ export async function getStaticPaths() {
   return slugs.map((slug) => ({ params: { slug } }));
 }
 
-const { date, title, content, featuredImage, author, categories, tags } =
-  await getPostInfo(slug);
+const postInfo = await getPostInfo(slug);
+
+if (!postInfo) {
+  return [];
+}
+
+const { title, content, featuredImage, date, author, categories, tags } =
+  postInfo;
 
 const isAdmin = author === "admin";
 

@@ -4,16 +4,24 @@ import { getLatestPosts, getPageInfo } from "@lib/wp";
 import Banner from "@components/banner/Banner.astro";
 import LatestPosts from "@components/posts/LatestPosts.astro";
 
-const { title, content, featuredImage } = await getPageInfo("home-page");
+const homePage = await getPageInfo("home-page");
 const posts = await getLatestPosts({ perPage: 6 });
+
+const pageExists = homePage && posts.length > 0;
 ---
 
-<Layout title={title}>
-  <Banner
-    title={title}
-    content={content}
-    featuredImage={featuredImage}
-    pageName="home-page"
-  />
-  <LatestPosts posts={posts} />
-</Layout>
+{
+  pageExists && (
+    <Layout title={homePage.title}>
+      <Banner
+        title={homePage.title}
+        content={homePage.content}
+        featuredImage={homePage.featuredImage}
+        pageName="home-page"
+      />
+      <LatestPosts posts={posts} />
+    </Layout>
+  )
+}
+
+{!pageExists && Astro.redirect("/404")}

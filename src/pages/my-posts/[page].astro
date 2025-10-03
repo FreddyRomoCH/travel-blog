@@ -5,9 +5,13 @@ import Banner from "@components/banner/Banner.astro";
 import AllPosts from "@components/posts/AllPosts.astro";
 
 export async function getStaticPaths() {
-  const { totalPages } = await getAllPosts({ page: 1, perPage: 6 });
+  const allPostsInfo = await getAllPosts({ page: 1, perPage: 6 });
 
-  return Array.from({ length: totalPages }, (_, i) => ({
+  if (!allPostsInfo) {
+    return [];
+  }
+
+  return Array.from({ length: allPostsInfo.totalPages }, (_, i) => ({
     params: { page: String(i + 1) },
   }));
 }
@@ -15,26 +19,34 @@ export async function getStaticPaths() {
 const currentPage = Number(Astro.params.page) || 1;
 const perPage = 6;
 
-const { posts, totalPages } = await getAllPosts({
+// const { posts, totalPages } = await getAllPosts({
+const allPostsInfo = await getAllPosts({
   page: currentPage,
   perPage,
 });
 
-const { title, content, featuredImage } = await getPageInfo("my-posts");
+if (!allPostsInfo) {
+  Astro.response.status = 404;
+}
 
 const prevPage = currentPage > 1 ? currentPage - 1 : null;
-const nextPage = currentPage < totalPages ? currentPage + 1 : null;
+const nextPage =
+  allPostsInfo && currentPage < allPostsInfo.totalPages
+    ? currentPage + 1
+    : null;
+
+const pageInfo = await getPageInfo("my-posts");
 ---
 
-<Layout title={title}>
+<Layout title={pageInfo?.title || "My Posts"}>
   <Banner
-    title={title}
-    content={content}
-    featuredImage={featuredImage}
+    title={pageInfo?.title || "My Posts"}
+    content={pageInfo?.content || ""}
+    featuredImage={pageInfo?.featuredImage || null}
     pageName="my-posts"
   />
 
-  <AllPosts posts={posts} />
+  <AllPosts posts={allPostsInfo?.posts} />
 
   <nav class="flex justify-center gap-4 my-6">
     {
@@ -48,7 +60,7 @@ const nextPage = currentPage < totalPages ? currentPage + 1 : null;
       )
     }
     <span class="px-4 py-2 text-sm text-primary-text font-inter font-light">
-      Page {currentPage} of {totalPages}
+      Page {currentPage} of {allPostsInfo?.totalPages}
     </span>
     {
       nextPage && (
