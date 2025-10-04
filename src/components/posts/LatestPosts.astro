@@ -18,14 +18,13 @@ import CardPost from "./CardPost.astro";
     {
       posts.length > 0 &&
         posts.map((post: Post) => {
-          const { title, excerpt, featuredImage, date, slug } = post;
+          const { title, excerpt, featuredImage, slug } = post;
 
           return (
             <CardPost
               title={title}
               excerpt={excerpt}
               featuredImage={featuredImage}
-              date={date}
               slug={slug}
             />
           );

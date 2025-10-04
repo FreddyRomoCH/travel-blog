@@ -18,10 +18,9 @@ const showButton = pageName === "home-page";
       class="relative flex flex-col items-center justify-center text-center gap-3 z-10 transition-transform duration-700 group-hover:scale-105"
     >
       <h1
+        set:html={title}
         class="text-base font-plusjakarta font-extrabold text-3xl md:text-4xl uppercase tracking-wider animate-slide-up"
-      >
-        {title}
-      </h1>
+      />
       <div
         class="text-base font-plusjakarta font-normal px-2 text-sm md:text-lg animate-slide-up [animation-delay:200ms]"
         set:html={content}

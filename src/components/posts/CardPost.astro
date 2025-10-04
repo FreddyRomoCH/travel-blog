@@ -1,5 +1,5 @@
 ---
-const { title, excerpt, featuredImage, date, slug } = Astro.props;
+const { title, excerpt, featuredImage, slug } = Astro.props;
 ---
 
 <article
@@ -18,7 +18,6 @@ const { title, excerpt, featuredImage, date, slug } = Astro.props;
     >
       <a href={`/post/${slug}`}>{title}</a>
     </h2>
-    <!-- <p class="font-inter font-normal text-sm mb-4">{date}</p> -->
     <div
       class="font-plusjakarta font-normal text-secondary-text mb-4 flex-1"
       set:html={excerpt}
