@@ -16,12 +16,24 @@ export async function getStaticPaths() {
 const { tag } = Astro.params as { tag: Slug };
 const { id } = Astro.props as { id: number };
 
-const { title, content, featuredImage } = await getPageInfo("tags");
+const tagsPageInfo = await getPageInfo("tags");
 
 const posts = await getPostsByTags({ perPage: 3 }, { tagIds: [id] });
+
+const pageExists = tagsPageInfo && posts.length > 0;
 ---
 
-<Layout title=`Tag - ${tag}`>
-  <Banner title={title} content={content} featuredImage={featuredImage} />
-  <AllPosts posts={posts} />
-</Layout>
+{
+  pageExists && (
+    <Layout title={`Tag - ${tag}`}>
+      <Banner
+        title={tagsPageInfo.title}
+        content={tagsPageInfo.content}
+        featuredImage={tagsPageInfo.featuredImage}
+      />
+      <AllPosts posts={posts} />
+    </Layout>
+  )
+}
+
+{!pageExists && Astro.redirect("/404")}

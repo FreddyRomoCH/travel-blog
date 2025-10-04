@@ -194,7 +194,16 @@ export const getPostsByCategory = async ({ perPage = 10 }: { perPage?: number } 
             slug
         } = post
 
-        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        let featuredImage: string;
+
+        if (post.jetpack_featured_media_url) {
+            featuredImage = post.jetpack_featured_media_url;
+        }
+        else{
+            featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        }
+
+        // const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
@@ -226,7 +235,16 @@ export const getPostsByTags = async ({ perPage = 10 }: { perPage?: number } = {}
             slug
         } = post
 
-        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        let featuredImage: string;
+
+        if (post.jetpack_featured_media_url) {
+            featuredImage = post.jetpack_featured_media_url;
+        }
+        else{
+            featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        }
+
+        // const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
@@ -258,7 +276,16 @@ export const getAllPosts = async ({ page = 1, perPage = 6 }: {page?:number, perP
             slug
         } = post
 
-        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        let featuredImage: string;
+
+        if (post.jetpack_featured_media_url) {
+            featuredImage = post.jetpack_featured_media_url;
+        }
+        else{
+            featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        }
+
+        // const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
