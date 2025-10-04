@@ -157,6 +157,8 @@ export const getLatestPosts = async ({ perPage = 10 }: { perPage?: number } = {}
             featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
         }
 
+        console.log("🖼️ Post:", slug, "featuredImage:", featuredImage);
+
         return { title, excerpt, content, date, slug, featuredImage }
     })
 
