@@ -111,7 +111,14 @@ export const getPostInfo = async (slug: string) => {
     const [data] = await response.json()
     const { date, title: { rendered: title }, content: { rendered: content } } = data
 
-    const featuredImage = data._embedded['wp:featuredmedia'][0].source_url
+    let featuredImage: string;
+
+    if (data.jetpack_featured_media_url) {
+        featuredImage = data.jetpack_featured_media_url;
+    }else{
+        featuredImage = data._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+    }
+    // const featuredImage = data._embedded['wp:featuredmedia'][0].source_url
     const author = data._embedded['author'][0].name
     const categories = data._embedded['wp:term'][0].map((category: Categories) => {
         const {id, name, slug} = category
@@ -156,8 +163,6 @@ export const getLatestPosts = async ({ perPage = 10 }: { perPage?: number } = {}
         }else{
             featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
         }
-
-        console.log("🖼️ Post:", slug, "featuredImage:", featuredImage);
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
