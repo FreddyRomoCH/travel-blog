@@ -149,7 +149,13 @@ export const getLatestPosts = async ({ perPage = 10 }: { perPage?: number } = {}
             slug
         } = post
 
-        const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        let featuredImage ;
+
+        if (posts.jetpack_featured_media_url) {
+            featuredImage = posts.jetpack_featured_media_url;
+        }else{
+            featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+        }
 
         return { title, excerpt, content, date, slug, featuredImage }
     })
