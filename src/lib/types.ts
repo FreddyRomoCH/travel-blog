@@ -15,6 +15,7 @@ export interface WPPost {
   _embedded?: {
     ["wp:featuredmedia"]?: Array<{ source_url: string }>;
   };
+  jetpack_featured_media_url?: string;
 }
 
 export type Slug = string;
