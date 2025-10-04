@@ -13,7 +13,28 @@ export const getPageInfo = async (slug: string) => {
     const [data] = await response.json()
     const { title: { rendered: title }, content: { rendered: content } } = data
 
-    const featuredImage = data._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+    // const featuredImage = data._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? ""
+
+    let featuredImage = "";
+     // 1) Intentar con jetpack_featured_media_url (en caso de que exista en algún plan)
+    if (data.jetpack_featured_media_url) {
+        featuredImage = data.jetpack_featured_media_url;
+    }
+
+    // 2) Si no existe, y hay un ID de media, hacer fetch extra al endpoint /media/{id}
+    else if (data.featured_media) {
+        try {
+        const mediaRes = await fetch(`${apiUrl}/media/${data.featured_media}`);
+        if (mediaRes.ok) {
+            const media = await mediaRes.json();
+            featuredImage = media.source_url || "";
+        } else {
+            console.error("Failed to fetch media for page:", slug, mediaRes.status);
+        }
+        } catch (err) {
+        console.error("Error fetching media:", err);
+        }
+    }
 
     return { title, content, featuredImage }
 }
